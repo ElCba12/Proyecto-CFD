@@ -21,35 +21,35 @@ residuals
     type            residuals;
     libs            ("libutilityFunctionObjects.so");
     writeControl    timeStep;
-    writeInterval   1.0;
+    writeInterval   1;
     fields          (p U T rho);
 }
 
-forceCoeffs
-{
-    type            forceCoeffs;
-    libs            ("libforces.so");
-    writeControl    timeStep;
-    writeInterval   1.0;
-    log             true; 
-    patches         (aerofoil); 
-
-    rho             rhoInf; 
-    rhoInf          1.2;  
-    
-    // Usamos la variable $speedVal del archivo incluido
-    magUInf         $speedVal;  
-    lRef            1.0;    
-    Aref            0.2;    
-    CofR            (0.25 0 0); 
-    pitchAxis       (0 1 0); 
-
-    // --- CALCULOS AUTOMATICOS DE DIRECCION ---
-    // Forzamos a que $angleVal sea decimal con scalar()
-    rad             #calc "degToRad(scalar($angleVal))";
-
-    // Usamos scalar($rad) dentro de sin/cos para evitar la ambigüedad del entero
-    dragDir         #calc "vector(cos(scalar($rad)), 0, sin(scalar($rad)))";
-    liftDir         #calc "vector(-sin(scalar($rad)), 0, cos(scalar($rad)))";
-}
+//    forceCoeffs
+//    {
+//        type            forceCoeffs;
+//        libs            ("libforces.so");
+//        writeControl    timeStep;
+//        writeInterval   1;
+//        log             true; 
+//        patches         (aerofoil); 
+//    
+//        rho             rho; 
+//        rhoInf          1.2;  
+//        
+//        // Usamos la variable $speedVal del archivo incluido
+//        magUInf         $speedVal;  
+//        lRef            1;    
+//        Aref            0.2;    
+//        CofR            (0.25 0 0); 
+//        pitchAxis       (0 1 0); 
+//    
+//        // --- CALCULOS AUTOMATICOS DE DIRECCION ---
+//        // Forzamos a que $angleVal sea decimal con scalar()
+//        rad             #calc "degToRad(scalar($angleVal))";
+//    
+//        // Usamos scalar($rad) dentro de sin/cos para evitar la ambigüedad del entero
+//        dragDir         #calc "vector(cos(scalar($rad)), 0, sin(scalar($rad)))";
+//        liftDir         #calc "vector(-sin(scalar($rad)), 0, cos(scalar($rad)))";
+//    }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

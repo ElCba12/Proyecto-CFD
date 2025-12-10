@@ -29,9 +29,16 @@ gradSchemes {
 // 4. DIVERGENCIAS
 // Como usamos fluxScheme arriba, aquí ponemos 'none' o esquemas auxiliares.
 divSchemes {
-    default none;
-    // Solo por si activaras viscosidad (no es tu caso, pero no estorba)
-    div(tauMC) Gauss linear;
+    default         none;
+    div(tauMC)      Gauss linear;
+    
+    // Esquemas convectivos para compresible (importante para evitar oscilaciones)
+    div(phi,U)      Gauss vanLeer;  // o Gauss minmod
+    div(phi,k)      Gauss upwind;
+    div(phi,epsilon) Gauss upwind;
+    div(phi,K)      Gauss upwind;
+    div(phid,p)     Gauss vanLeer;
+    div(phi,h)      Gauss vanLeer;
 }
 
 // 5. LAPLACIANOS (Difusión)

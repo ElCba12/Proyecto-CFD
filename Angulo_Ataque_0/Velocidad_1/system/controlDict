@@ -19,13 +19,13 @@ solver          shockFluid;
 startFrom       startTime;
 startTime       0;
 stopAt          endTime;
-endTime         2000; // Ojo: 2000 seg es mucho, vigílalo
+endTime         0.2; // Ojo: 2000 seg es mucho, vigílalo
 
 // --- CORRECCIÓN 1: Paso de tiempo inicial pequeño ---
 deltaT          1e-6;
 
-writeControl    timeStep;
-writeInterval   100; // Ajusta según necesites (ej. cada 100 pasos)
+writeControl    adjustableRunTime;
+writeInterval   0.001; // Ajusta según necesites (ej. cada 100 pasos)
 purgeWrite      0;
 writeFormat     ascii;
 writePrecision  10;
@@ -37,7 +37,7 @@ runTimeModifiable true;
 // --- CORRECCIÓN 2: Control automático obligatorio para shockFluid ---
 adjustTimeStep  yes;
 maxCo           0.5;  // Mantenlo bajo (< 1.0) para estabilidad
-maxDeltaT       1e-2; // Límite superior por si acaso
+maxDeltaT       1e-6; // Límite superior por si acaso
 
 // --- CORRECCIÓN 3: Cargar tus cálculos de Lift/Drag ---
 functions
