@@ -13,23 +13,23 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-// CORRECCIÓN: Presión Absoluta (Pa) para compresible
+// CORRECCIÓN CRÍTICA: Usar 101325 Pa. Si usas 0, la simulación explota.
 pOut            101325; 
 
-// CORRECCIÓN: Dimensiones de Pascales [1 -1 -2 0 0 0 0]
+// CORRECCIÓN: Dimensiones de presión termodinámica (Pa)
 dimensions      [1 -1 -2 0 0 0 0];
 
 internalField   uniform $pOut;
 
 boundaryField
 {
-    // Coincide con blockMeshDict: aerofoil
+    // Nombre exacto según tu blockMeshDict (línea 169)
     aerofoil
     {
         type            zeroGradient;
     }
 
-    // Coincide con blockMeshDict: inlet
+    // Nombre exacto según tu blockMeshDict (línea 176)
     inlet
     {
         type            freestreamPressure;
@@ -37,7 +37,7 @@ boundaryField
         value           uniform $pOut;
     }
 
-    // Coincide con blockMeshDict: outlet
+    // Nombre exacto según tu blockMeshDict (línea 186)
     outlet
     {
         type            freestreamPressure;
@@ -45,7 +45,12 @@ boundaryField
         value           uniform $pOut;
     }
 
-    frontAndBack
+    // Nombres exactos para las caras 2D
+    front
+    {
+        type            empty;
+    }
+    back
     {
         type            empty;
     }

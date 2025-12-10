@@ -15,18 +15,15 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 dimensions      [0 0 0 1 0 0 0];
-
 internalField   uniform 293;
 
 boundaryField
 {
-    // Coincide con blockMeshDict: aerofoil
     aerofoil
     {
-        type            zeroGradient; // Adiabático
+        type            zeroGradient;
     }
 
-    // Coincide con blockMeshDict: inlet
     inlet
     {
         type            freestream;
@@ -34,7 +31,6 @@ boundaryField
         value           uniform 293;
     }
 
-    // Coincide con blockMeshDict: outlet
     outlet
     {
         type            freestream;
@@ -42,7 +38,11 @@ boundaryField
         value           uniform 293;
     }
 
-    frontAndBack
+    front
+    {
+        type            empty;
+    }
+    back
     {
         type            empty;
     }

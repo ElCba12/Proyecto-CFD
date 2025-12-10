@@ -15,6 +15,7 @@ FoamFile
 
 #include "../constant/simParams"
 
+// Cálculos trigonométricos
 angle           #calc "-degToRad($angleVal)";
 #calcInclude    "transform.H"
 liftDir         #calc "transform(Ry($angle), vector(0, 0, 1))";
@@ -22,18 +23,17 @@ dragDir         #calc "transform(Ry($angle), vector(1, 0, 0))";
 Uinlet          #calc "$speedVal*$<vector>dragDir";
 
 dimensions      [0 1 -1 0 0 0 0];
-
 internalField   uniform $Uinlet;
 
 boundaryField
 {
-    // Coincide con blockMeshDict: aerofoil
+    // Nombre exacto en blockMeshDict. 
+    // IMPORTANTE: 'slip' porque es flujo no viscoso.
     aerofoil
     {
-        type            slip; // OBLIGATORIO para inviscid
+        type            slip; 
     }
 
-    // Coincide con blockMeshDict: inlet
     inlet
     {
         type            freestreamVelocity;
@@ -41,7 +41,6 @@ boundaryField
         value           uniform $Uinlet;
     }
 
-    // Coincide con blockMeshDict: outlet
     outlet
     {
         type            freestreamVelocity;
@@ -49,7 +48,11 @@ boundaryField
         value           uniform $Uinlet;
     }
 
-    frontAndBack
+    front
+    {
+        type            empty;
+    }
+    back
     {
         type            empty;
     }
