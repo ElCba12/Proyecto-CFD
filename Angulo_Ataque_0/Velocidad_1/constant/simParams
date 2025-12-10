@@ -1,0 +1,5 @@
+// Archivo: constant/simParams
+
+
+angleVal        0.0;    // Angulo de ataque (grados)
+speedVal        34.3;   // Velocidad (m/s)

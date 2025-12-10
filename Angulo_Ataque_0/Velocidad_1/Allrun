@@ -1,0 +1,25 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# 1. Copiar y DESCOMPRIMIR la geometria para asegurar que blockMesh la encuentre
+# (Tu blockMeshDict busca "NACA0012.obj", no el .gz)
+cp $FOAM_TUTORIALS/resources/geometry/NACA0012.obj.gz constant/geometry/
+gunzip -f constant/geometry/NACA0012.obj.gz
+
+# 2. Generar la malla
+# Tu blockMeshDict ya genera una malla 2D con espesor de 1 celda.
+runApplication blockMesh
+
+# --- PASOS COMENTADOS (No necesarios si blockMesh ya es 2D) ---
+# runApplication transformPoints "scale=(1 0 1)"
+# runApplication extrudeMesh
+# -------------------------------------------------------------
+
+# 3. Ejecutar la simulacion
+# Usamos el comando que funciono en la terminal
+runApplication foamRun -solver incompressibleFluid
+
+#------------------------------------------------------------------------------

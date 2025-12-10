@@ -1,0 +1,44 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// En incompresible, pOut suele ser 0 (presion relativa)
+pOut            0;
+
+// IMPORTANTE: Dimensiones de Presion Cinematica [m^2/s^2]
+// (0 Masa, 2 Longitud, -2 Tiempo)
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform $pOut;
+
+boundaryField
+{
+    freestream
+    {
+        // Usamos freestreamPressure para condiciones de campo lejano
+        type            freestreamPressure;
+        freestreamValue uniform $pOut;
+        value           uniform $pOut;
+    }
+
+    wall
+    {
+        // En la pared la derivada normal de la presion es cero
+        type            zeroGradient;
+    }
+
+    #includeEtc "caseDicts/setConstraintTypes"
+}
+
+// ************************************************************************* //

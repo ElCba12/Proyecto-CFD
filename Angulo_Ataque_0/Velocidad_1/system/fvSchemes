@@ -1,0 +1,60 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile {
+    format ascii;
+    class dictionary;
+    object fvSchemes;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+fluxScheme Kurganov;
+
+// 2. ESQUEMAS TEMPORALES
+// shockFluid es transitorio (marcha en el tiempo), NO uses steadyState.
+ddtSchemes {
+    default Euler;
+}
+
+// 3. GRADIENTES
+gradSchemes {
+    default Gauss linear;
+}
+
+// 4. DIVERGENCIAS
+// Como usamos fluxScheme arriba, aquí ponemos 'none' o esquemas auxiliares.
+divSchemes {
+    default none;
+    // Solo por si activaras viscosidad (no es tu caso, pero no estorba)
+    div(tauMC) Gauss linear;
+}
+
+// 5. LAPLACIANOS (Difusión)
+laplacianSchemes {
+    default Gauss linear corrected;
+}
+
+// 6. INTERPOLACIÓN (RECONSTRUCCIÓN DE VARIABLES)
+// Esto es vital para que Kurganov funcione. Define cómo interpola
+// densidad, velocidad y temperatura en las caras de la celda.
+interpolationSchemes {
+    default linear;
+
+    // 'vanLeer' es un limitador robusto para evitar oscilaciones en choques.
+    // Si la simulación explota, cambia 'vanLeer' por 'Minmod'.
+    reconstruct(rho) vanLeer;
+    reconstruct(U) vanLeer;
+    reconstruct(T) vanLeer;
+}
+
+// 7. GRADIENTES DE SUPERFICIE NORMAL
+snGradSchemes {
+    default corrected;
+}
+
+// ************************************************************************* //

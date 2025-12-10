@@ -1,0 +1,48 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0]; // Kelvin
+
+internalField   uniform 293;     // Temperatura ambiente (20°C)
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 293;
+    }
+
+    freestream
+    {
+        type            freestream;     // Detecta si entra o sale flujo
+        freestreamValue uniform 293;
+        value           uniform 293;
+    }
+
+    wall
+    {
+        type            zeroGradient;   // <--- ADIABÁTICO (El calor no atraviesa la pared)
+    }
+    
+    // Si tienes parches "front" y "back" en 2D, recuerda ponerlos como empty
+    frontAndBack
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

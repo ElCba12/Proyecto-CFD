@@ -1,0 +1,45 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+thermoType
+{
+    type            hePsiThermo;       // Termodinámica basada en compresibilidad (psi)
+    mixture         pureMixture;       // Mezcla pura (solo aire)
+    transport       const;             // Propiedades de transporte constantes
+    thermo          hConst;            // Calor específico constante (Cp)
+    equationOfState perfectGas;        // Gas ideal: P = rho*R*T
+    specie          specie;
+    energy          sensibleInternalEnergy; // shockFluid prefiere energía interna (e)
+}
+
+mixture
+{
+    specie
+    {
+        molWeight   28.96;  // Peso molecular del aire
+    }
+    thermodynamics
+    {
+        Cp          1004.5; // Calor específico a presión constante [J/kgK]
+        Hf          0;      // Entalpía de formación (irrelevante aquí)
+    }
+    transport
+    {
+        mu          0;      // IMPORTANTE: Viscosidad dinámica CERO
+        Pr          0.7;    // Número de Prandtl (para transferencia de calor)
+    }
+}
+// ************************************************************************* //
