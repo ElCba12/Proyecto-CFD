@@ -13,32 +13,41 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-// En incompresible, pOut suele ser 0 (presion relativa)
-pOut            0;
+// CORRECCIÓN: Presión Absoluta (Pa) para compresible
+pOut            101325; 
 
-// IMPORTANTE: Dimensiones de Presion Cinematica [m^2/s^2]
-// (0 Masa, 2 Longitud, -2 Tiempo)
-dimensions      [0 2 -2 0 0 0 0];
+// CORRECCIÓN: Dimensiones de Pascales [1 -1 -2 0 0 0 0]
+dimensions      [1 -1 -2 0 0 0 0];
 
 internalField   uniform $pOut;
 
 boundaryField
 {
-    freestream
+    // Coincide con blockMeshDict: aerofoil
+    aerofoil
     {
-        // Usamos freestreamPressure para condiciones de campo lejano
+        type            zeroGradient;
+    }
+
+    // Coincide con blockMeshDict: inlet
+    inlet
+    {
         type            freestreamPressure;
         freestreamValue uniform $pOut;
         value           uniform $pOut;
     }
 
-    wall
+    // Coincide con blockMeshDict: outlet
+    outlet
     {
-        // En la pared la derivada normal de la presion es cero
-        type            zeroGradient;
+        type            freestreamPressure;
+        freestreamValue uniform $pOut;
+        value           uniform $pOut;
     }
 
-    #includeEtc "caseDicts/setConstraintTypes"
+    frontAndBack
+    {
+        type            empty;
+    }
 }
-
 // ************************************************************************* //

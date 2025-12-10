@@ -13,48 +13,45 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-// 1. CARGAMOS LOS PARAMETROS
 #include "../constant/simParams"
 
-// 2. CALCULAMOS VECTORES AUTOMATICAMENTE
-// Usamos las variables $angleVal y $speedVal del archivo incluido
-
 angle           #calc "-degToRad($angleVal)";
-
 #calcInclude    "transform.H"
-// Nota: Ry rota alrededor del eje Y (que es tu eje de profundidad)
 liftDir         #calc "transform(Ry($angle), vector(0, 0, 1))";
 dragDir         #calc "transform(Ry($angle), vector(1, 0, 0))";
-
 Uinlet          #calc "$speedVal*$<vector>dragDir";
 
-// 3. DEFINICIONES OBLIGATORIAS (Aqui estaba tu error)
-dimensions      [0 1 -1 0 0 0 0]; // m/s
+dimensions      [0 1 -1 0 0 0 0];
 
 internalField   uniform $Uinlet;
 
 boundaryField
 {
-    
-    inlet
+    // Coincide con blockMeshDict: aerofoil
+    aerofoil
     {
-        type            fixedValue;
-        value           uniform $Uinlet;
+        type            slip; // OBLIGATORIO para inviscid
     }
-    
-    freestream
+
+    // Coincide con blockMeshDict: inlet
+    inlet
     {
         type            freestreamVelocity;
         freestreamValue uniform $Uinlet;
         value           uniform $Uinlet;
     }
 
-    wall
+    // Coincide con blockMeshDict: outlet
+    outlet
     {
-        type            slip;
+        type            freestreamVelocity;
+        freestreamValue uniform $Uinlet;
+        value           uniform $Uinlet;
     }
 
-    #includeEtc "caseDicts/setConstraintTypes"
+    frontAndBack
+    {
+        type            empty;
+    }
 }
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// ************************************************************************* //
